@@ -34,22 +34,17 @@ public class MainGUI extends JFrame implements ActionListener {
 	
 	public MainGUI() {
             txtField1 = new JTextField(10);
-            txtField1.setName("Field1");
             field1 = new RequiredFieldDecorator(txtField1);
+            field1.setName("1st Field");
             
             txtField2 = new JTextField(10);
-            txtField2.setName("Field2");
             // Here we wrap a pain JTextField
-//            field2 = new NumericRangeDecorator(txtField2,20,50);
-            
-            // Here we wrap a RequiredFieldDecorator
-            JTextFieldValidatorDecorator dField = new NotRequiredFieldDecorator(txtField2);
-            dField.setName("Field2");
-            field2 = new NumericRangeDecorator(dField,20,50);
+            field2 = new NumericRangeDecorator(txtField2,20,50,true);
+            field2.setName("2nd Field");
             
             txtField3 = new JTextField(10);
-            txtField3.setName("Field3");
-            field3 = new DateRangeDecorator(txtField3,"8/1/2007","12/1/2007");
+            field3 = new DateRangeDecorator(txtField3,"8/1/2007","12/1/2007",true);
+            field3.setName("3rd Field");
             
             textFields[0] = field1;
             textFields[1] = field2;

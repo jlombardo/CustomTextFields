@@ -15,6 +15,7 @@ public class DateRangeDecorator extends JTextFieldValidatorDecorator {
     private String errorMsg;
     private String startRange;
     private String endRange;
+    private boolean optional;
     
     /**
      * Custom constructor to decorate a component.
@@ -28,12 +29,14 @@ public class DateRangeDecorator extends JTextFieldValidatorDecorator {
      * formatted in the short style of java.text.DateFormat.
      */
     public DateRangeDecorator(JTextField textComponent, 
-            String startRange, String endRange) {
+            String startRange, String endRange, boolean optional) {
         
         this.textComponent = textComponent;
         this.startRange = startRange;
         this.endRange = endRange;
-        errorMsg = "The field " + textComponent.getName() + 
+        this.optional = optional;
+        
+        errorMsg = "The field " + getName() + 
                 " requires a date between " + startRange + 
                 " and " + endRange + " inclusive.";
     }
@@ -49,9 +52,13 @@ public class DateRangeDecorator extends JTextFieldValidatorDecorator {
         Date max = null;
         
         try {
-            fv = DateUtilities.toDate(getText());
-            min = DateUtilities.toDate(startRange);
-            max = DateUtilities.toDate(endRange);
+           if(optional && getText().length() == 0) {
+                return true;
+            } else {
+                fv = DateUtilities.toDate(getText());
+                min = DateUtilities.toDate(startRange);
+                max = DateUtilities.toDate(endRange);
+           }
               
         } catch(Exception e) {
             return false;

@@ -21,17 +21,12 @@ public class RequiredFieldDecorator extends JTextFieldValidatorDecorator {
      */
     public RequiredFieldDecorator(JTextField textComponent) {
         this.textComponent = textComponent;
-        errorMsg = "The field " + textComponent.getName() + " is required.";
+        errorMsg = "The field " + getName() + " is required.";
     }
  
     @Override
     public boolean isValidInput() {
-        if(getText() == null 
-                || getText().length() > 0) {
-            return true;
-        } else {
-            return false;
-        }
+        return getText().length() == 0 ? false : true;
     }
 
     @Override

@@ -13,6 +13,7 @@ public class NumericRangeDecorator extends JTextFieldValidatorDecorator {
     private String errorMsg;
     private int startRange;
     private int endRange;
+    private boolean optional;
     
     /**
      * Custom constructor to decorate a component.
@@ -22,40 +23,37 @@ public class NumericRangeDecorator extends JTextFieldValidatorDecorator {
      * object should be included in any error message.
      * @param startRange - the start of the numeric range, inclusive.
      * @param endRange - the end of the numeric range, inclusive.
+     * @param optional - if true, validation only occurs with input
      */
     public NumericRangeDecorator(JTextField textComponent, 
-            int startRange, int endRange) {
+            int startRange, int endRange, boolean optional) {
         
         this.textComponent = textComponent;
         this.startRange = startRange;
         this.endRange = endRange;
+        this.optional = optional;
+        
         errorMsg = "The field " + textComponent.getName() + 
                 " requires a whole number between 20 and 50 inclusive.";
     }
 
+    /**
+     * Gets the validation status based on the range constraints. If the optional
+     * flag is true and there is no input the validation is skipped and 
+     * true is returned; else, numeric constraints are verified. 
+     * 
+     * @return the validation status
+     */
     @Override
     public boolean isValidInput() {
         int number = 0;
 
-        /*
-            * By doing this we make NumericRange validation optional -- it
-            * will only kick in if there is input. However, if we want 
-            * required field validation in addition to numeric range, we 
-            * can decorate another decorator -- the RequiredField decorator.
-            */
-        if(((JTextFieldValidatorDecorator)textComponent).isValidInput()
-                && getText().length() == 0) {
-            return true;
-        }
-//        if(!(textComponent.getClass()
-//                .getSimpleName().equals("RequiredFieldDecorator"))
-//                && getText().length() == 0) {
-//
-//            return true; // exit method immediately
-//        }
-        
         try {
-            number = Integer.parseInt(getText());   
+            if(optional && getText().length() == 0) {
+                return true;
+            } else {
+                number = Integer.parseInt(getText());  
+            }
         } catch(RuntimeException e) {
             return false;
         }
@@ -71,4 +69,6 @@ public class NumericRangeDecorator extends JTextFieldValidatorDecorator {
     public String getErrorMsg() {
         return errorMsg;
     }
+    
+    
 }
